@@ -2,7 +2,13 @@
 * based on parser support
 *
 * check if we have support for concurrent assertions, currently only verific
-* does. */
+* does.
+*
+* usage :
+* `SVA_CO( <assert_name> , clk, nreset, <precondition> , <implication> )
+* `SVA_CO_NCD( <assert_name> , <precondition> , <implication> )
+*
+*/
 
 `ifdef VERIFIC
 	`define _HAS_CONCURRENT
@@ -10,7 +16,10 @@
 
 
 `ifdef FORMAL
-	/* define an sva concurrent assertions with an overlapping squence
+
+	/*
+ 	* CO : Concurrent Overlapping ( |-> ) 	 
+ 	* define an sva concurrent assertions with an overlapping squence
 	* A |-> B 
 	*
 	* supports clk and ignored on disable */
@@ -28,7 +37,7 @@
 		end	
 	`endif 
 
-	// no clk or disable
+	/* NCD : no clk or disable */
 	`ifdef _HAS_CONCURRENT
 		`define SVA_CO_NCD( NAME , PRE, IMP )\
 			NAME : assert property ( ( PRE ) |-> ( IMP )); 
@@ -38,4 +47,5 @@
 			NAME: assert ( ~(PRE) | ( (PRE) & (IMP) )); \
 		end	
 	`endif
+ 
 `endif
