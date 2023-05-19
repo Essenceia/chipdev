@@ -1,6 +1,7 @@
+`include "formal.vh"
+
 module model #(
-	parameter DATA_WIDTH = 32,
-	parameter 
+	parameter DATA_WIDTH = 32
 ) (
   input  [DATA_WIDTH-1:0] din,
   input  din_en,
@@ -12,9 +13,27 @@ module model #(
 );
 
 // data should be forced to 0 when not driven 
-assign dout0 = {DATA_WIDTH{din_en & ( addr == 2'd0 )} & din; 
-assign dout1 = {DATA_WIDTH{din_en & ( addr == 2'd1 )} & din; 
-assign dout2 = {DATA_WIDTH{din_en & ( addr == 2'd2 )} & din; 
-assign dout3 = {DATA_WIDTH{din_en & ( addr == 2'd3 )} & din; 
+assign dout0 = {DATA_WIDTH{din_en & ( addr == 2'd0 )}} & din; 
+assign dout1 = {DATA_WIDTH{din_en & ( addr == 2'd1 )}} & din; 
+assign dout2 = {DATA_WIDTH{din_en & ( addr == 2'd2 )}} & din; 
+assign dout3 = {DATA_WIDTH{din_en & ( addr == 2'd3 )}} & din; 
 
+
+
+`ifdef FORMAL
+//sva_dout_zero_din_en_false : assert property ( 
+//	din_en | ( ~din_en & ((dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0))));
+
+//sva_dout_zero_din_en_false : assert property ( 
+//	 ~din_en |-> ((dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0)));
+
+//`SVA_CO_NCD( dout_zero_din_en_false, ~din_en, (dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0))
+always begin
+	a_oflow:  assert (addr < 4);
+end
+
+always begin
+sva_dout_zero: assert ( din_en | ( ( ~din_en ) & ((dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0)) ));
+end
+`endif // FORMAL
 endmodule
