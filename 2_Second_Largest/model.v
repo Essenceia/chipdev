@@ -8,7 +8,7 @@ module model #(parameter
 );
 
 reg  [DATA_WIDTH-1:0] max_q;
-wire [DATA_WIDTH-1:0] max_q;
+wire [DATA_WIDTH-1:0] max_next;
 reg  [DATA_WIDTH-1:0] max2_q; // second largest
 wire [DATA_WIDTH-1:0] max2_next;
 
@@ -35,12 +35,15 @@ assign dout = max2_q;
 
 `ifdef FORMAL
 
+initial begin
+	// assumption
+	// max_q and max2_q are not equal on init unless 0
+	a_init : assume property ( (max_q == 0 & max2_q == 0) | ( max2_q < max_q));
+end
+
 always @(posedge clk)
 begin
 	if (~resetn) begin
-		// assumption
-		// max_q and max2_q are not equal on init unless 0
-		a_not_eq: assume ( (max_q == 0) | ( max2_q != max_q));
 		
 		// assertions
 		sva_max_greater_max2: assert( (max_q == 0) | ( max_q > max2_q )); 
