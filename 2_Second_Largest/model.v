@@ -33,4 +33,25 @@ end
 // output 
 assign dout = max2_q;
 
+`ifdef FORMAL
+
+always @(posedge clk)
+begin
+	if (~resetn) begin
+		// assumption
+		// max_q and max2_q are not equal on init unless 0
+		a_not_eq: assume ( (max_q == 0) | ( max2_q != max_q));
+		
+		// assertions
+		sva_max_greater_max2: assert( (max_q == 0) | ( max_q > max2_q )); 
+
+		// cover
+		c_max_zero : cover ( max_q == 0 );
+		c_change : cover ( din != dout );
+		c_max_greater : cover ( max_q > max2_q );	
+		c_max_update : cover ( new_max );
+	end
+	c_reset : cover ( resetn );
+end
+`endif // FORMAL 
 endmodule
