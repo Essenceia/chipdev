@@ -21,19 +21,13 @@ assign dout3 = {DATA_WIDTH{din_en & ( addr == 2'd3 )}} & din;
 
 
 `ifdef FORMAL
-//sva_dout_zero_din_en_false : assert property ( 
-//	din_en | ( ~din_en & ((dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0))));
 
-//sva_dout_zero_din_en_false : assert property ( 
-//	 ~din_en |-> ((dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0)));
+`SVA_CO_NCD( dout_zero_din_en_false, ~din_en, (dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0))
+// output is correct
+`SVA_CO_NCD( dout_addr0_match , din_en & (addr == 2'd0) , (dout0 == din) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0))
+`SVA_CO_NCD( dout_addr1_match , din_en & (addr == 2'd1) , (dout1 == din) & (dout0 == 0) & (dout2 == 0) & (dout3 == 0))
+`SVA_CO_NCD( dout_addr2_match , din_en & (addr == 2'd2) , (dout2 == din) & (dout0 == 0) & (dout1 == 0) & (dout3 == 0))
+`SVA_CO_NCD( dout_addr3_match , din_en & (addr == 2'd3) , (dout3 == din) & (dout0 == 0) & (dout1 == 0) & (dout2 == 0))
 
-//`SVA_CO_NCD( dout_zero_din_en_false, ~din_en, (dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0))
-always begin
-	a_oflow:  assert (addr < 4);
-end
-
-always begin
-sva_dout_zero: assert ( din_en | ( ( ~din_en ) & ((dout0 == 0) & (dout1 == 0) & (dout2 == 0) & (dout3 == 0)) ));
-end
 `endif // FORMAL
 endmodule

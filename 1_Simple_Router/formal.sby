@@ -22,8 +22,7 @@ smtbmc boolector
 [script]
 nofullskip: read
 noverific: read -noverific
-read -formal formal.vh
-read -formal router.v
+read -formal formal.vh router.v
 hierarchy -check -top model
 prep -top model
 

@@ -16,3 +16,15 @@ Input and Output Signals
     dout1 - Output 1. Corresponds to addr = b01.
     dout2 - Output 2. Corresponds to addr = b10.
     dout3 - Output 3. Corresponds to addr = b11.
+
+## Formal verification
+
+Since we don't have native support for concurrent formal assumptions we have
+created a series of macro's to adapt our concurrent overlapping assertions into
+immediate assertions if need be. 
+This is defined in the `formal.vh` file. 
+
+To run tests :
+```
+sby -f formal.sby
+```
