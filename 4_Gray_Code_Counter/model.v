@@ -24,7 +24,7 @@ begin
 end
 
 assign { unused_bin_inc, bin_next } = bin_q + DATA_WIDTH'd1;
-assign gray_next = gray_q ^ bin_q;
+assign gray_next = bin_q ^ ( bin_q >> 1 );
 
 assign out = gray_q;
 
@@ -34,6 +34,7 @@ initial
 begin
 	// assume 
 	a_reset : assume ( ~resetn );
+	
 end
 
 always @(posedge clk)
