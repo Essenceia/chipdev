@@ -33,8 +33,7 @@ assign out = gray_q;
 initial 
 begin
 	// assume 
-	// initial state of gray code respects xor onehot rule
-	a_xor_onehot_init : assume ( ~resetn );
+	a_reset : assume ( ~resetn );
 end
 
 always @(posedge clk)
@@ -42,12 +41,12 @@ begin
 	if (resetn)
 	begin
 
-	// assert 
-	// there is only 1 bit difference between 2 consequtive gray code's
-	// or we have overflown
-	sva_gray_1_bit_diff : assert ( unused_bin_inc |  $onehot( gray_next ^ gray_q ) );	
-	// cover
-	c_bin_overflow : cover ( unused_bin_inc );
+		// assert 
+		// there is only 1 bit difference between 2 consequtive gray code's
+		// or we have overflown
+		sva_gray_1_bit_diff : assert ( unused_bin_inc |  $onehot( gray_next ^ gray_q ) );	
+		// cover
+		c_bin_overflow : cover ( unused_bin_inc );
 	end
 	c_reset: cover(~resetn );
 end
