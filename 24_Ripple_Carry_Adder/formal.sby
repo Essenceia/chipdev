@@ -1,0 +1,32 @@
+[tasks]
+basic bmc
+nofullskip prove
+cover
+noverific cover
+basic cover : default
+
+[options]
+cover:
+mode cover
+--
+prove:
+mode prove
+--
+bmc: 
+mode bmc
+--
+
+[engines]
+smtbmc boolector 
+
+[script]
+nofullskip: read
+noverific: read -noverific
+read -formal  full_adder.sv
+read -formal  model.v
+hierarchy -check -top model
+prep -top model
+
+[files]
+full_adder.sv
+model.v
