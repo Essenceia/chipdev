@@ -1,7 +1,7 @@
 module model #(
 	parameter DATA_W = 8,
 	parameter ADDR_W = 3,
-	parameter DATA_N = 8 // getting non constant error $pow(2,ADDR_W)
+	parameter DATA_N = 8 // getting non constant error when using $pow(2,ADDR_W)
 )
 (
     input clk,
